@@ -3,13 +3,11 @@ import sys
 import os
 import gtk
 import gobject
-from PieMeter import PieMeter
 
 class TrackerApp:
   def __init__(self):
-    self.pie = PieMeter()
     self.icon = gtk.StatusIcon()    
-    self.icon.set_from_file("data/brasero-disc-100.png")
+    self.icon.set_from_file("data/time-100.png")
     self.icon.connect('activate', self.activate_win)
     self.icon.connect('popup-menu', self.popup_menu)
     self.win = gtk.Window()
@@ -57,9 +55,9 @@ class TrackerApp:
     if self.win:
       self.label.set_text(text)
       self.bar.set_fraction(fraction)
-      self.pie.set_progress(fraction)
       self.icon.set_tooltip(text)
-      self.icon.set_from_pixbuf(self.pie.get_pixbuf())
+      filename = self.get_icon_filename(fraction)
+      self.icon.set_from_file(filename)
       
   def set_lbl_markup(self, text):
     if self.win:
@@ -84,7 +82,7 @@ class TrackerApp:
     else:
       self.set_window(prettytime, frac)
       self.icon.set_tooltip(prettytime)
-    return 1
+   
 
   def start(self):
     self.icon.set_visible(True)
@@ -96,6 +94,28 @@ class TrackerApp:
     self.icon.set_visible(False)
     gtk.main_quit()
 
+  def get_icon_filename(self, fraction):
+    if fraction < 0.12:
+      return "data/time-000.png"
+    if fraction < 0.24:
+      return "data/time-012.png"     
+    if fraction < 0.36:
+      return "data/time-024.png"     
+    if fraction < 0.48:
+      return "data/time-036.png"     
+    if fraction < 0.60:
+      return "data/time-048.png"     
+    if fraction < 0.72:
+      return "data/time-060.png"     
+    if fraction < 0.84:
+      return "data/time-072.png"     
+    if fraction < 0.96:
+      return "data/time-084.png"     
+    if fraction < 1.0:
+      return "data/time-096.png"     
+    if fraction == 1.0:
+      return "data/time-100.png"     
+    
 if __name__ == '__main__':
   app = TrackerApp()
   app.start()
